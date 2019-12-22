@@ -58,7 +58,7 @@ export default {
         const { data: res } = await this.$http.post('login', this.loginForm)
         if (res.meta.status !== 200) return this.$message.error('用户名或者密码错误')
         this.$message.success('登录成功')
-        console.log(res)
+        // console.log(res)
         window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('/home')
       })
