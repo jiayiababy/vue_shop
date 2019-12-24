@@ -245,21 +245,30 @@ export default {
       })
     },
     async removeUserById(id) {
+      // 弹框询问用户是否删除数据
       const confirmResult = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).catch(err => err)
+      // 如果用户确认了取消删除, 则返回值为字符串confirm
+      // 如果用户确认点击了取消, 则返回值为字符串cancel
       if (confirmResult !== 'confirm') {
-        return this.$message.info('取消了删除')
+        return this.$message.info('已取消删除')
       }
       const { data: res } = await this.$http.delete('users/' + id)
       if (res.meta.status !== 200) {
-        return this.$message.error('用户删除失败')
+        return this.$message.error('删除用户失败! ')
       }
-      this.$message.success('用户删除成功')
+      this.$message.success('删除用户成功! ')
+      if (this.queryInfo.pagenum !== 1) {
+        if (this.userlist.length === 1) {
+          this.queryInfo.pagenum -= 1
+        }
+      }
       this.getUserList()
     },
+
     // 展示分配角色的对话框
     async setRole(userInfo) {
       this.userInfo = userInfo
